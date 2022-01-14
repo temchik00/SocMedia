@@ -3,16 +3,23 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { AuthComponent } from './Components/auth/auth.component';
+import { ProfileComponent } from './Components/profile/profile.component';
+import { ChatComponent } from './Components/chat/chat.component';
+import { LeftMenuComponent } from './Components/left-menu/left-menu.component';
+import { PublicationComponent } from './Components/publication/publication.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    AuthComponent,
+    ProfileComponent,
+    ChatComponent,
+    LeftMenuComponent,
+    PublicationComponent,
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule
-  ],
+  imports: [BrowserModule, AppRoutingModule],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

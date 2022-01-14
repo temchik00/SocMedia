@@ -1,0 +1,65 @@
+.main-content {
+  display: flex;
+  justify-content: center;
+}
+
+.window {
+  display: flex;
+  gap: 20px;
+}
+
+.line {
+  background: rgb(173, 186, 199);
+  width: 1px;
+}
+
+.header {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+}
+
+.auth,
+.registration {
+  display: flex;
+  flex-direction: column;
+}
+
+.form {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  row-gap: 15px;
+}
+
+.label {
+  font-size: 0.9rem;
+  line-height: 1rem;
+}
+
+.input {
+  outline: none;
+  border: 1.5px solid #777;
+  border-radius: 3px;
+  font-size: 1.3rem;
+}
+
+.apply-button {
+  margin-top: auto;
+  font-size: 1rem;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  background: rgb(34, 39, 46);
+  color: rgb(173, 186, 199);
+  padding: 6px 0;
+  box-sizing: border-box;
+  border-radius: 3px;
+}
+
+.apply-button:hover {
+  background: rgba(34, 39, 46, 0.9);
+}
+
+.apply-button:active {
+  background: rgba(34, 39, 46, 0.8);
+}

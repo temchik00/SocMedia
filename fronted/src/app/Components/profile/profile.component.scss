@@ -1,0 +1,49 @@
+.profile {
+  width: 1120px;
+  box-sizing: border-box;
+  display: flex;
+  column-gap: 20px;
+  height: 100%;
+}
+
+.avatar {
+  top: 70px;
+  position: sticky;
+  flex: 0 0 auto;
+  align-self: flex-start;
+  width: 180px;
+  height: 180px;
+}
+
+.profile-right {
+  flex: 1;
+}
+
+.profile-top {
+  display: flex;
+}
+
+.profile-info {
+  flex: 1 1 auto;
+}
+
+.name {
+  font-size: 1.8rem;
+}
+
+.other-info {
+  display: grid;
+  grid-template-columns: 150px auto;
+}
+
+.line {
+  height: 1px;
+  width: 100%;
+  background: rgb(173, 186, 199);
+  margin: 10px 0;
+}
+
+.entry {
+  font-size: 1.1rem;
+  line-height: 1.8rem;
+}
