@@ -1,29 +1,17 @@
-from fastapi import APIRouter, UploadFile, File
+from fastapi import APIRouter, UploadFile, File, Depends
 from fastapi.responses import FileResponse, JSONResponse
-from os import listdir, getcwd
-from os.path import join
+from services.ftp import FtpService
 
 router = APIRouter(
     prefix='/file'
 )
 
 @router.post("/")
-async def upload_file(file:UploadFile = File(...)):
-    filedir = join(getcwd(), 'files')
-    number = len(listdir(filedir))
-    filename = f'{number}.{".".join(file.filename.split(".")[1:])}'
-    with open(join(filedir, filename), 'wb') as image:
-        content = await file.read()
-        image.write(content)
-        image.close()
+async def upload_file(file:UploadFile = File(...), service: FtpService=Depends()):
+    filename = await service.save(file)
     return JSONResponse(content={'filename': filename})
 
 
-@router.get("/{filename}")
-def get_file(filename: str):
-    filedir = join(getcwd(), 'files')
-    filepath = join(filedir, filename)
-    return FileResponse(path=filepath)
-
-
-
+@router.get("/{filename}/")
+def get_file(filename: str, service: FtpService=Depends()):
+    return FileResponse(path=service.get_path(filename))
