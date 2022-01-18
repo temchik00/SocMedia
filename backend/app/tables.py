@@ -36,8 +36,8 @@ class User(Base):
     birth_date = Column(Date)
     phone = Column(VARCHAR(12), unique=True)
     email = Column(VARCHAR(50), nullable=False, unique=True)
-    password = Column(VARCHAR(50), nullable=False)
-    posts = relationship('publication')
+    password = Column(Text, nullable=False)
+    #TODO: Relationship and add array to model
 
 
 class Publication(Base):
@@ -46,8 +46,7 @@ class Publication(Base):
     user_id = Column(Integer, ForeignKey('user.id'))
     content = Column(Text)
     image = Column(VARCHAR(300))
-    time_posted = Column(DateTime, server_default=func.now())
-    likes = relationship('like')
+    time_posted = Column(DateTime(timezone=True), server_default=func.now())
 
 
 class Like(Base):
@@ -61,7 +60,6 @@ class Chat(Base):
     id = Column(Integer, primary_key=True)
     name = Column(VARCHAR(50))
     image = Column(VARCHAR(300))
-    messages = relationship('chat_message')
 
 
 class ChatMember(Base):
