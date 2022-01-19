@@ -71,7 +71,7 @@ class UserService:
 
     def register_new_user(self, user_data: UserCreate) -> Token:
         user = self.session.query(tables.User).filter(tables.User.email == user_data.email).first()
-        if not user:
+        if user:
             raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail='Email already taken')
         user = tables.User(
             email=user_data.email,
