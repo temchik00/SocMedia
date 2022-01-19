@@ -5,14 +5,14 @@ from datetime import date
 
 class UserBase(BaseModel):
     email: str
+    first_name: str
+    last_name: str
 
 
 class User(UserBase):
     id: int
     sex: Optional[int]
     city: Optional[int]
-    first_name: Optional[str]
-    second_name: Optional[str]
     birth_date: Optional[date]
     phone: Optional[str]
     class Config:
@@ -27,7 +27,7 @@ class UserUpdate(BaseModel):
     sex: Optional[int]
     city: Optional[int]
     first_name: Optional[str]
-    second_name: Optional[str]
+    last_name: Optional[str]
     birth_date: Optional[date]
     phone: Optional[str]
 

@@ -29,15 +29,14 @@ class Friend(Base):
 class User(Base):
     __tablename__ = 'user'
     id = Column(Integer, primary_key=True)
-    sex = Column(Integer, ForeignKey('sex.id'))
-    city = Column(Integer, ForeignKey('city.id'))
-    first_name = Column(VARCHAR(50))
-    second_name = Column(VARCHAR(50))
-    birth_date = Column(Date)
-    phone = Column(VARCHAR(12), unique=True)
+    first_name = Column(VARCHAR(50), nullable=False)
+    last_name = Column(VARCHAR(50), nullable=False)
     email = Column(VARCHAR(50), nullable=False, unique=True)
     password = Column(Text, nullable=False)
-    #TODO: Relationship and add array to model
+    sex = Column(Integer, ForeignKey('sex.id'))
+    city = Column(Integer, ForeignKey('city.id'))
+    birth_date = Column(Date)
+    phone = Column(VARCHAR(12), unique=True)
 
 
 class Publication(Base):

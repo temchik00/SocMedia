@@ -74,6 +74,8 @@ class UserService:
         if user:
             raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail='Email already taken')
         user = tables.User(
+            first_name=user_data.first_name,
+            last_name=user_data.last_name,
             email=user_data.email,
             password=self.hash_password(user_data.password)
         )
