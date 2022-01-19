@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, firstValueFrom } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 
 interface TokenData {
@@ -80,9 +80,16 @@ export class AuthService {
     }
   }
 
-  public createAccount(email: string, password: string): void {
+  public createAccount(
+    firstName: string,
+    lastName: string,
+    email: string,
+    password: string
+  ): void {
     firstValueFrom(
       this.httpClient.post<TokenData>(environment.apiUrl + '/user/sign_up/', {
+        first_name: firstName,
+        last_name: lastName,
         email: email,
         password: password,
       })
@@ -100,5 +107,9 @@ export class AuthService {
         console.error(error);
         this.logOut();
       });
+  }
+
+  public getTokenHeader(): HttpHeaders {
+    return new HttpHeaders().set('Authorization', 'Bearer ' + this.accessToken);
   }
 }

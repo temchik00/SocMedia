@@ -4,17 +4,29 @@
       <div class="header">Регистрация</div>
       <div class="form">
         <div class="input-group">
+          <div class="label">Имя</div>
+          <input type="text" class="input" [(ngModel)]="firstName" />
+        </div>
+        <div class="input-group">
+          <div class="label">Фамилия</div>
+          <input type="text" class="input" [(ngModel)]="lastName" />
+        </div>
+        <div class="input-group">
           <div class="label">Почта</div>
           <input type="text" class="input" [(ngModel)]="registrationEmail" />
         </div>
         <div class="input-group">
           <div class="label">Пароль</div>
-          <input type="text" class="input" [(ngModel)]="registrationPassword" />
+          <input
+            type="password"
+            class="input"
+            [(ngModel)]="registrationPassword"
+          />
         </div>
         <div class="input-group">
           <div class="label">Повторите пароль</div>
           <input
-            type="text"
+            type="password"
             class="input"
             [(ngModel)]="registrationRepeatPassword"
           />
@@ -34,7 +46,7 @@
         </div>
         <div class="input-group">
           <div class="label">Пароль</div>
-          <input type="text" class="input" [(ngModel)]="authPassword" />
+          <input type="password" class="input" [(ngModel)]="authPassword" />
         </div>
         <button class="apply-button" (click)="login()">Войти</button>
       </div>

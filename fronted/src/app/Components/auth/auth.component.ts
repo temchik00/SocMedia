@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/Shared/auth.service';
+import { UserService } from 'src/app/Shared/user.service';
 
 @Component({
   selector: 'app-auth',
@@ -14,6 +15,9 @@ export class AuthComponent implements OnInit {
   public authLogin: string = '';
   public authPassword: string = '';
 
+  public firstName: string = '';
+  public lastName: string = '';
+
   constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
@@ -26,6 +30,8 @@ export class AuthComponent implements OnInit {
 
   public register(): void {
     this.authService.createAccount(
+      this.firstName,
+      this.lastName,
       this.registrationEmail,
       this.registrationPassword
     );
