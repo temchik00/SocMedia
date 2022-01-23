@@ -4,19 +4,93 @@
   </div>
   <div class="content">
     <div class="profile">
-      <img class="avatar tile" />
+      <div class="avatar-container tile">
+        <img
+          class="avatar"
+          src="{{ apiUrl + '/file/' + user.avatar }}"
+          onerror="this.onerror=null; this.src='assets\\images\\nophoto.svg'"
+        />
+        <input
+          *ngIf="this.userService.userId === user.id"
+          type="file"
+          class="avatar-selector"
+          (change)="selectAvatar($event)"
+        />
+        <button class="apply-button" *ngIf="avatar" (click)="updateAvatar()">
+          Загрузить
+        </button>
+      </div>
       <div class="profile-right">
         <div class="profile-top">
           <div class="profile-info tile">
-            <div class="name">Сергеев Артём</div>
+            <div class="name">{{ user.first_name }} {{ user.last_name }}</div>
             <div class="line"></div>
             <div class="other-info">
               <div class="entry">Город</div>
-              <div class="entry">Усть-подзалупинск</div>
+              <div class="entry" *ngIf="isRedacting === false">
+                {{ user.city === null ? "Не указано" : user.city.name }}
+              </div>
+              <div class="entry" *ngIf="isRedacting === true">
+                <app-dropdown-select
+                  [options]="cities"
+                  [(selectedOption)]="user.city"
+                ></app-dropdown-select>
+              </div>
               <div class="entry">Дата рождения</div>
-              <div class="entry">Родился в 70-м году</div>
+              <div class="entry" *ngIf="isRedacting === false">
+                {{ user.birth_date === null ? "Не указано" : user.birth_date }}
+              </div>
+              <div class="entry" *ngIf="isRedacting === true">
+                <input
+                  type="date"
+                  class="info-input"
+                  [(ngModel)]="user.birth_date"
+                />
+              </div>
               <div class="entry">Пол</div>
-              <div class="entry">Линолеум</div>
+              <div class="entry" *ngIf="isRedacting === false">
+                {{ user.sex === null ? "Не указано" : user.sex.name }}
+              </div>
+              <div class="entry" *ngIf="isRedacting === true">
+                <app-dropdown-select
+                  [options]="sexes"
+                  [(selectedOption)]="user.sex"
+                ></app-dropdown-select>
+              </div>
+              <div class="entry">Телефон</div>
+              <div class="entry" *ngIf="isRedacting === false">
+                {{ user.phone === null ? "Не указано" : user.phone }}
+              </div>
+              <div class="entry" *ngIf="isRedacting === true">
+                <input
+                  type="text"
+                  class="info-input"
+                  [(ngModel)]="user.phone"
+                />
+              </div>
+            </div>
+            <div class="buttons" *ngIf="this.userService.userId === user.id">
+              <button
+                class="apply-button"
+                *ngIf="isRedacting"
+                (click)="revertUserChanges()"
+              >
+                Отмена
+              </button>
+              <button
+                class="apply-button"
+                *ngIf="isRedacting"
+                (click)="saveUserChanges()"
+              >
+                Сохранить
+              </button>
+              <button
+                class="apply-button"
+                *ngIf="!isRedacting"
+                (click)="redact()"
+              >
+                Редактировать
+              </button>
             </div>
           </div>
         </div>

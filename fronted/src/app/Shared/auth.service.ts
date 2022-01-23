@@ -12,13 +12,13 @@ interface TokenData {
   providedIn: 'root',
 })
 export class AuthService {
-  private tokenLifetime: number = 36;
+  private tokenLifetime: number = 3600;
   private email: string | undefined;
   private password: string | undefined;
   private accessToken: string | undefined;
   private refreshSubscription: any | undefined;
   public isAuthorzed: BehaviorSubject<boolean | undefined> =
-    new BehaviorSubject<boolean | undefined>(undefined);
+    new BehaviorSubject<boolean | undefined>(false);
 
   constructor(private httpClient: HttpClient) {}
 

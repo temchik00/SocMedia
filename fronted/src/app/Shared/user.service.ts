@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { firstValueFrom, Subject } from 'rxjs';
+import { BehaviorSubject, firstValueFrom, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { User, UserResponse } from '../Interfaces/user';
 import { AuthService } from './auth.service';
@@ -10,22 +10,29 @@ import { MiscService } from './misc.service';
   providedIn: 'root',
 })
 export class UserService {
-  public user: User | undefined;
-  public initializedUser: Subject<void> = new Subject<void>();
+  private user: User | undefined;
+  public userId: number = -2;
 
   constructor(
     private auth: AuthService,
     private misc: MiscService,
     private httpClient: HttpClient
   ) {
-    this.auth.isAuthorzed.subscribe((isAuth: boolean | undefined) => {
-      if (isAuth === true) {
-        this.getSelfInfo();
+    this.auth.isAuthorzed.subscribe(
+      async (isAuthorized: boolean | undefined) => {
+        if (isAuthorized === true) {
+          this.user = await this.getSelf();
+          this.userId = this.user.id;
+        }
+        if (isAuthorized === false) {
+          this.user = undefined;
+          this.userId = -2;
+        }
       }
-    });
+    );
   }
 
-  private async getUser(): Promise<UserResponse> {
+  private async getUserFromToken(): Promise<UserResponse> {
     return firstValueFrom(
       this.httpClient.get<UserResponse>(environment.apiUrl + '/user/', {
         headers: this.auth.getTokenHeader(),
@@ -33,26 +40,48 @@ export class UserService {
     );
   }
 
-  public async getSelfInfo(): Promise<void> {
-    let userInfo: UserResponse = await this.getUser();
+  private async getUserFromId(userId: number): Promise<UserResponse> {
+    return firstValueFrom(
+      this.httpClient.get<UserResponse>(`${environment.apiUrl}/user/${userId}/`)
+    );
+  }
+
+  private unpackUserResponse(userResponse: UserResponse): User {
     let user: User = {
-      id: userInfo.id,
-      first_name: userInfo.first_name,
-      second_name: userInfo.second_name,
-      birth_date: userInfo.birth_date,
-      phone: userInfo.phone,
-      sex: undefined,
-      city: undefined,
+      id: userResponse.id,
+      first_name: userResponse.first_name,
+      last_name: userResponse.last_name,
+      birth_date: userResponse.birth_date,
+      phone: userResponse.phone,
+      sex: null,
+      city: null,
+      avatar: userResponse.avatar,
     };
+    return user;
+  }
 
-    if (userInfo.city != undefined) {
-      user.city = await this.misc.getCity(userInfo.city);
+  private async getUserInfo(userResponse: UserResponse): Promise<User> {
+    let user: User = this.unpackUserResponse(userResponse);
+    if (userResponse.city != null) {
+      user.city = await this.misc.getCity(userResponse.city);
     }
 
-    if (userInfo.sex != undefined) {
-      user.sex = await this.misc.getSex(userInfo.sex);
+    if (userResponse.sex != null) {
+      user.sex = await this.misc.getSex(userResponse.sex);
     }
-    this.initializedUser.next();
+    return Promise.resolve(user);
+  }
+
+  public async getSelf(): Promise<User> {
+    let userInfo: UserResponse = await this.getUserFromToken();
+    let user = await this.getUserInfo(userInfo);
+    return Promise.resolve(user);
+  }
+
+  public async getUser(userId: number): Promise<User> {
+    let userInfo: UserResponse = await this.getUserFromId(userId);
+    let user = await this.getUserInfo(userInfo);
+    return Promise.resolve(user);
   }
 
   public updateSelf(userInfo: Object): Promise<UserResponse> {
@@ -65,5 +94,12 @@ export class UserService {
         }
       )
     );
+  }
+
+  public async updateAvatar(avatar: File): Promise<UserResponse> {
+    let avatarLink: string = await (
+      await this.misc.sendPicture(avatar, this.auth.getTokenHeader())
+    ).filename;
+    return this.updateSelf({ avatar: avatarLink });
   }
 }

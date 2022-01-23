@@ -44,24 +44,3 @@
   width: 260px;
   box-sizing: border-box;
 }
-
-.apply-button {
-  margin-top: auto;
-  font-size: 1rem;
-  cursor: pointer;
-  border: none;
-  outline: none;
-  background: rgb(34, 39, 46);
-  color: rgb(173, 186, 199);
-  padding: 6px 0;
-  box-sizing: border-box;
-  border-radius: 3px;
-}
-
-.apply-button:hover {
-  background: rgba(34, 39, 46, 0.9);
-}
-
-.apply-button:active {
-  background: rgba(34, 39, 46, 0.8);
-}

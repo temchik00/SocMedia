@@ -1,0 +1,32 @@
+<div class="select">
+  <div
+    class="select-body"
+    [style.border-bottom]="isExpanded ? '1px dashed' : '1px solid'"
+    [style.border-color]="
+      isExpanded ? 'rgb(173, 186, 199)' : 'rgba(0, 0, 0, 0.15)'
+    "
+    [style.border-radius]="isExpanded ? '3px 3px 0 0' : '3px'"
+    (click)="toggleExpand()"
+  >
+    <div class="select-text">
+      {{ selectedOption === null ? "Не выбрано" : selectedOption.name }}
+    </div>
+    <div class="arrow-up-down">
+      <img
+        class="arrow"
+        style="transform: rotate(180deg); margin-bottom: 2.5px"
+        src="assets/images/chevron.svg"
+      />
+      <img class="arrow" src="assets/images/chevron.svg" />
+    </div>
+  </div>
+  <div class="select-dropdown" [style.display]="isExpanded ? 'unset' : 'none'">
+    <div
+      class="entry"
+      *ngFor="let option of options"
+      (click)="selectOption(option)"
+    >
+      {{ option.name }}
+    </div>
+  </div>
+</div>

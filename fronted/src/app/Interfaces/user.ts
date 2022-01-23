@@ -4,17 +4,18 @@ import { Sex } from './sex';
 interface UserBase {
   id: number;
   first_name: string;
-  second_name: string;
-  birth_date: Date | undefined;
-  phone: string | undefined;
+  last_name: string;
+  birth_date: Date | null;
+  phone: string | null;
+  avatar: string;
 }
 
 export interface User extends UserBase {
-  sex: Sex | undefined;
-  city: City | undefined;
+  sex: Sex | null;
+  city: City | null;
 }
 
 export interface UserResponse extends UserBase {
-  sex: number | undefined;
-  city: number | undefined;
+  sex: number | null;
+  city: number | null;
 }

@@ -10,6 +10,7 @@ import { ProfileComponent } from './Components/profile/profile.component';
 import { ChatComponent } from './Components/chat/chat.component';
 import { LeftMenuComponent } from './Components/left-menu/left-menu.component';
 import { PublicationComponent } from './Components/publication/publication.component';
+import { DropdownSelectComponent } from './Components/dropdown-select/dropdown-select.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { PublicationComponent } from './Components/publication/publication.compo
     ChatComponent,
     LeftMenuComponent,
     PublicationComponent,
+    DropdownSelectComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule, FormsModule],
   providers: [],

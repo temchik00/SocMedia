@@ -6,13 +6,23 @@
   height: 100%;
 }
 
-.avatar {
-  top: 70px;
+.avatar-container {
+  align-self: flex-start;
   position: sticky;
   flex: 0 0 auto;
-  align-self: flex-start;
+}
+
+.avatar {
+  display: block;
+  top: 70px;
   width: 180px;
   height: 180px;
+}
+
+.avatar-selector {
+  margin: 10px 0;
+  display: block;
+  width: 180px;
 }
 
 .profile-right {
@@ -33,7 +43,8 @@
 
 .other-info {
   display: grid;
-  grid-template-columns: 150px auto;
+  grid-template-columns: 150px 250px;
+  gap: 5px;
 }
 
 .line {
@@ -46,4 +57,32 @@
 .entry {
   font-size: 1.1rem;
   line-height: 1.8rem;
+}
+
+.info-input {
+  border: 1px solid rgba(0, 0, 0, 0);
+  outline: none;
+  height: 100%;
+  width: 250px;
+  box-sizing: border-box;
+  padding: 2px 6px;
+  font-size: 1rem;
+  background: rgb(34, 39, 46);
+  color: rgb(173, 186, 199);
+  border-radius: 3px;
+}
+
+.info-input:focus {
+  border: 1px solid rgb(173, 186, 199);
+}
+
+.buttons {
+  margin-top: 5px;
+  width: 405px;
+  display: flex;
+  column-gap: 5px;
+}
+
+.apply-button {
+  width: 100%;
 }
