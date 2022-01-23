@@ -15,6 +15,7 @@ class User(UserBase):
     city: Optional[int]
     birth_date: Optional[date]
     phone: Optional[str]
+    avatar: Optional[str]
     class Config:
         orm_mode=True
 
@@ -26,10 +27,9 @@ class UserCreate(UserBase):
 class UserUpdate(BaseModel):
     sex: Optional[int]
     city: Optional[int]
-    first_name: Optional[str]
-    last_name: Optional[str]
     birth_date: Optional[date]
     phone: Optional[str]
+    avatar: Optional[str]
 
 
 class Token(BaseModel):

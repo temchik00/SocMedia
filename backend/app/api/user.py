@@ -33,6 +33,13 @@ def sign_in(
 def get_self(user: User = Depends(get_current_user)):
     return user
 
+@router.get('/{user_id}', response_model=User)
+def get_user(
+    user_id: int,
+    service: UserService = Depends()
+):
+    return service.get_user(user_id)
+
 @router.patch('/', response_model=User)
 def update_self(
     user_data: UserUpdate,

@@ -37,6 +37,7 @@ class User(Base):
     city = Column(Integer, ForeignKey('city.id'))
     birth_date = Column(Date)
     phone = Column(VARCHAR(12), unique=True)
+    avatar = Column(VARCHAR(300), default='')
 
 
 class Publication(Base):

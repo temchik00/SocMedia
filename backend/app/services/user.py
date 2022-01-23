@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from email.policy import HTTP
 from fastapi import HTTPException, status, Depends
 from fastapi.security import OAuth2PasswordBearer
 from passlib.hash import bcrypt
@@ -104,4 +105,10 @@ class UserService:
         for field, value in user_data:
             setattr(user, field, value)
         self.session.commit()
+        return user
+
+    def get_user(self, user_id: int) -> User:
+        user = self.session.query(tables.User).filter_by(id=user_id).first()
+        if not user:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
         return user
