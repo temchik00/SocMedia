@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, firstValueFrom } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { CookieService } from 'ngx-cookie-service';
 
 interface TokenData {
   access_token: string;
@@ -20,7 +21,13 @@ export class AuthService {
   public isAuthorzed: BehaviorSubject<boolean | undefined> =
     new BehaviorSubject<boolean | undefined>(false);
 
-  constructor(private httpClient: HttpClient) {}
+  constructor(private httpClient: HttpClient, private cookie: CookieService) {
+    if (cookie.check('email') && cookie.check('password')) {
+      let email = cookie.get('email');
+      let password = cookie.get('password');
+      this.logIn(email, password);
+    }
+  }
 
   private async getToken(email: string, password: string): Promise<string> {
     return new Promise(async (resolve, reject) => {
@@ -62,6 +69,8 @@ export class AuthService {
     this.password = password;
     let result = await this.authorize();
     if (result) {
+      this.cookie.set('email', email, undefined, '/');
+      this.cookie.set('password', password, undefined, '/');
       this.isAuthorzed.next(true);
       this.refreshSubscription = setInterval(() => {
         this.authorize();
@@ -74,6 +83,8 @@ export class AuthService {
     this.password = undefined;
     this.accessToken = undefined;
     this.isAuthorzed.next(false);
+    if (this.cookie.check('email')) this.cookie.delete('email');
+    if (this.cookie.check('password')) this.cookie.delete('password');
     if (this.refreshSubscription != undefined) {
       clearInterval(this.refreshSubscription);
       this.refreshSubscription = undefined;
