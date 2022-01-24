@@ -97,9 +97,30 @@ export class UserService {
   }
 
   public async updateAvatar(avatar: File): Promise<UserResponse> {
-    let avatarLink: string = await (
+    let avatarLink: string = (
       await this.misc.sendPicture(avatar, this.auth.getTokenHeader())
     ).filename;
     return this.updateSelf({ avatar: avatarLink });
+  }
+
+  public async postPublication(
+    text: string | undefined,
+    image: File | undefined
+  ): Promise<void> {
+    let body: any = {};
+    if (text && text.length > 0) {
+      body.content = text;
+    }
+    if (image) {
+      let imageUrl = (
+        await this.misc.sendPicture(image, this.auth.getTokenHeader())
+      ).filename;
+      body.image = imageUrl;
+    }
+    await firstValueFrom(
+      this.httpClient.post(environment.apiUrl + '/publication/', body, {
+        headers: this.auth.getTokenHeader(),
+      })
+    );
   }
 }

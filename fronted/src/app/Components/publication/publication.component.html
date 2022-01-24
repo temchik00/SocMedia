@@ -1,1 +1,41 @@
-<p>publication works!</p>
+<div class="publication-container tile" *ngIf="publication">
+  <div class="header">
+    <img
+      src="{{ apiUrl + '/file/' + user.avatar }}"
+      onerror="this.onerror=null; this.src='assets\\images\\nophoto.svg'"
+      class="avatar"
+    />
+    <div class="info">
+      <div class="name">{{ user.first_name }} {{ user.last_name }}</div>
+      <div class="time-posted">{{ publication.time_posted }}</div>
+    </div>
+  </div>
+  <div class="text" *ngIf="publication.content">{{ publication.content }}</div>
+  <div class="image-container" *ngIf="publication.image">
+    <img
+      src="{{ apiUrl + '/file/' + publication.image }}"
+      alt=""
+      class="image"
+    />
+  </div>
+  <div class="likes">
+    <div
+      class="likes-container"
+      [style.border-color]="isLiked ? '#aa2200' : '#adbac7'"
+      [style.cursor]="userService.userId >= 0 ? 'pointer' : 'default'"
+      (click)="userService.userId >= 0 && toggleLike()"
+    >
+      <img
+        src="{{
+          isLiked
+            ? 'assets\\images\\heart.svg'
+            : 'assets\\images\\hollowHeart.svg'
+        }}"
+        class="heart"
+      />
+      <div class="counter">
+        {{ likes.length }}
+      </div>
+    </div>
+  </div>
+</div>

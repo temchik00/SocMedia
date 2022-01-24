@@ -1,0 +1,62 @@
+.publication-container {
+  display: flex;
+  flex-direction: column;
+  row-gap: 15px;
+}
+.header {
+  display: flex;
+  column-gap: 15px;
+  align-items: flex-end;
+}
+
+.avatar {
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  object-position: center;
+}
+
+.name {
+  font-size: 1.3rem;
+}
+
+.time-posted {
+  font-size: 0.9rem;
+}
+
+.text {
+  font-size: 1.2rem;
+  white-space: pre;
+}
+
+.image {
+  max-width: 100%;
+  height: auto;
+  max-height: 500px;
+}
+
+.image-container {
+  display: flex;
+  justify-content: center;
+}
+
+.likes-container {
+  display: inline-flex;
+  align-items: center;
+  column-gap: 6px;
+  padding: 5px 8px;
+  border: 1px solid;
+  border-radius: 20px;
+  margin-right: auto;
+}
+
+.heart {
+  width: 20px;
+  height: 20px;
+}
+
+.counter {
+  font-size: 1rem;
+  line-height: 1rem;
+}

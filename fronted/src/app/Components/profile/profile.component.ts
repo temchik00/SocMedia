@@ -2,9 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { City } from 'src/app/Interfaces/city';
+import { Publication } from 'src/app/Interfaces/publication';
 import { Sex } from 'src/app/Interfaces/sex';
 import { AuthService } from 'src/app/Shared/auth.service';
 import { MiscService } from 'src/app/Shared/misc.service';
+import { PublicationService } from 'src/app/Shared/publication.service';
 import { UserService } from 'src/app/Shared/user.service';
 import { environment } from 'src/environments/environment';
 import { User } from '../../Interfaces/user';
@@ -31,11 +33,18 @@ export class ProfileComponent implements OnInit {
   public avatar: File | undefined = undefined;
   public apiUrl: string = environment.apiUrl;
 
+  public publicationText: string = '';
+  public publicationImage: File | undefined;
+  public publicationImageUrl: string | undefined;
+
+  public publications: Publication[] = [];
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private misc: MiscService,
     private auth: AuthService,
+    private publicationService: PublicationService,
     public userService: UserService
   ) {}
 
@@ -46,7 +55,7 @@ export class ProfileComponent implements OnInit {
       } else {
         let id = +(<string>params.get('id'));
         this.user = await this.userService.getUser(id);
-        console.log(this.user);
+        this.publications = await this.publicationService.getPublications(id);
       }
     });
     this.misc.getCities().then((cities: City[]) => {
@@ -111,7 +120,7 @@ export class ProfileComponent implements OnInit {
     ) {
       data.birth_date = this.user.birth_date;
     }
-    this.userService.updateSelf(data);
+    await this.userService.updateSelf(data);
     let params = this.route.snapshot.queryParamMap;
     let id = +(<string>params.get('id'));
     this.user = await this.userService.getUser(id);
@@ -126,7 +135,6 @@ export class ProfileComponent implements OnInit {
   }
 
   public selectAvatar(event: any): void {
-    console.log(event);
     const files: FileList = event.target.files;
     if (files && files.length != 0) {
       this.avatar = files[0];
@@ -141,6 +149,45 @@ export class ProfileComponent implements OnInit {
       let params = this.route.snapshot.queryParamMap;
       let id = +(<string>params.get('id'));
       this.user = await this.userService.getUser(id);
+      this.avatar = undefined;
+    }
+  }
+
+  public uploadImage(event: any): void {
+    const files: FileList = event.target.files;
+    if (files && files.length != 0) {
+      this.publicationImage = files[0];
+      let reader = new FileReader();
+      reader.readAsDataURL(this.publicationImage);
+      reader.onload = (_event: any) => {
+        this.publicationImageUrl = <string>reader.result;
+      };
+    } else {
+      this.publicationImage = undefined;
+      this.publicationImageUrl = undefined;
+    }
+  }
+
+  public removeImage(): void {
+    this.publicationImage = undefined;
+    this.publicationImageUrl = undefined;
+  }
+
+  public async postPublication(): Promise<void> {
+    if (
+      (this.publicationText && this.publicationText.length > 0) ||
+      this.publicationImage
+    ) {
+      await this.userService.postPublication(
+        this.publicationText,
+        this.publicationImage
+      );
+      this.publicationText = '';
+      this.publicationImage = undefined;
+      this.publicationImageUrl = undefined;
+      let params = this.route.snapshot.queryParamMap;
+      let id = +(<string>params.get('id'));
+      this.publications = await this.publicationService.getPublications(id);
     }
   }
 }

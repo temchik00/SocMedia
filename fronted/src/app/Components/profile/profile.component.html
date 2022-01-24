@@ -94,8 +94,48 @@
             </div>
           </div>
         </div>
+        <div
+          class="post-publication tile"
+          *ngIf="this.userService.userId === user.id"
+        >
+          <textarea
+            class="publication-text"
+            placeholder="Текст публикации"
+            [(ngModel)]="publicationText"
+          ></textarea>
+          <div class="publication-image-container" *ngIf="publicationImageUrl">
+            <div class="publication-image-wrapper">
+              <img
+                src="assets\images\close.svg"
+                class="close-icon"
+                (click)="removeImage()"
+              />
+              <img [src]="publicationImageUrl" class="publication-image" />
+            </div>
+          </div>
+          <div class="publication-button-wrapper">
+            <div class="dropzone">
+              <img src="assets\images\paperclip.svg" class="paperclip" />
+              <input
+                type="file"
+                class="image-input"
+                (change)="uploadImage($event)"
+              />
+            </div>
+            <button
+              class="apply-button post-publication-button"
+              (click)="postPublication()"
+            >
+              Опубликовать
+            </button>
+          </div>
+        </div>
         <div class="wall">
-          <app-publication></app-publication>
+          <app-publication
+            *ngFor="let publication of publications"
+            [publication]="publication"
+            [user]="user"
+          ></app-publication>
         </div>
       </div>
     </div>
