@@ -38,7 +38,11 @@
               </div>
               <div class="entry">Дата рождения</div>
               <div class="entry" *ngIf="isRedacting === false">
-                {{ user.birth_date === null ? "Не указано" : user.birth_date }}
+                {{
+                  user.birth_date === null
+                    ? "Не указано"
+                    : (user.birth_date | date: "longDate")
+                }}
               </div>
               <div class="entry" *ngIf="isRedacting === true">
                 <input

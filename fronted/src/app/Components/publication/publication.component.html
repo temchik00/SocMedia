@@ -7,7 +7,9 @@
     />
     <div class="info">
       <div class="name">{{ user.first_name }} {{ user.last_name }}</div>
-      <div class="time-posted">{{ publication.time_posted }}</div>
+      <div class="time-posted">
+        {{ publication.time_posted | date: "medium" }}
+      </div>
     </div>
   </div>
   <div class="text" *ngIf="publication.content">{{ publication.content }}</div>

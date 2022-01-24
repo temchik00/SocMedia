@@ -47,11 +47,14 @@ export class UserService {
   }
 
   private unpackUserResponse(userResponse: UserResponse): User {
+    let date: Date | null = null;
+    if (userResponse.birth_date != null)
+      date = new Date(userResponse.birth_date);
     let user: User = {
       id: userResponse.id,
       first_name: userResponse.first_name,
       last_name: userResponse.last_name,
-      birth_date: userResponse.birth_date,
+      birth_date: date,
       phone: userResponse.phone,
       sex: null,
       city: null,
