@@ -17,7 +17,7 @@ class PublicationService:
             return publication
 
     def get_publications(self, user_id: int) -> List[Publication]:
-        return self.session.query(tables.Publication).filter(tables.Publication.user_id == user_id).all()
+        return self.session.query(tables.Publication).filter(tables.Publication.user_id == user_id).order_by(tables.Publication.id.desc()).all()
 
     def create_publication(self, publication_info: PublicationCreate, user_id: int) -> Publication:
         publication = tables.Publication()

@@ -103,7 +103,8 @@ class UserService:
     def update_user(self, user_id: int, user_data: UserUpdate) -> User:
         user = self.session.query(tables.User).filter_by(id=user_id).first()
         for field, value in user_data:
-            setattr(user, field, value)
+            if value:
+                setattr(user, field, value)
         self.session.commit()
         return user
 
