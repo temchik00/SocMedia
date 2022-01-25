@@ -7,7 +7,7 @@ from models.user import User
 
 router = APIRouter(prefix='/friend')
 
-@router.post('/', status_code=status.HTTP_201_CREATED, response_model=User)
+@router.post('/{friend_id}/', status_code=status.HTTP_201_CREATED, response_model=User)
 def add_friend(
     friend_id: int,
     service: FriendService = Depends(),
