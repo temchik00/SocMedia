@@ -124,7 +124,8 @@ class UserService:
         city: Optional[int]=None,
         younger: Optional[int]=None,
         older: Optional[int]=None,
-        page_number: Optional[int]=None
+        page_number: Optional[int]=None,
+        exclude_user: Optional[int]=None
     ) -> List[User]:
         query = self.session.query(tables.User)
         if first_name:
@@ -141,6 +142,8 @@ class UserService:
         if older:
             date = datetime.now() - relativedelta(years=older)
             query = query.filter(tables.User.birth_date < date)
+        if exclude_user:
+            query = query.filter(tables.User.id != exclude_user)
         query = query.order_by(tables.User.id.desc()).limit(settings.user_count_in_responce)
         if page_number:
             query = query.offset(page_number * settings.user_count_in_responce)

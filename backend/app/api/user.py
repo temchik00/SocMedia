@@ -58,6 +58,7 @@ def filter_users(
     younger: Optional[int]=None,
     older: Optional[int]=None,
     page_number: Optional[int]=None,
+    exclude_user: Optional[int]=None,
     service: UserService = Depends()
 ):
     return service.filter_users(
@@ -66,5 +67,7 @@ def filter_users(
         sex,
         city,
         younger,
-        older
+        older,
+        page_number,
+        exclude_user
     )
