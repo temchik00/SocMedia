@@ -141,7 +141,7 @@ class UserService:
         if older:
             date = datetime.now() - relativedelta(years=older)
             query = query.filter(tables.User.birth_date < date)
-        query.limit(settings.user_count_in_responce)
+        query = query.order_by(tables.User.id.desc()).limit(settings.user_count_in_responce)
         if page_number:
-            query.offset(page_number * settings.user_count_in_responce)
+            query = query.offset(page_number * settings.user_count_in_responce)
         return query.all()
