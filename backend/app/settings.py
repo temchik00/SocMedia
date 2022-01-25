@@ -7,7 +7,7 @@ class Settings(BaseSettings):
     secret: str
     jwt_algorithm: str = 'HS256'
     jwt_lifetime: int = 3600
-    user_count_in_responce: int = 50
+    user_count_in_responce: int = 42
     message_count_in_responce: int = 70
 
 settings = Settings(

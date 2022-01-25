@@ -40,4 +40,10 @@ class FriendService:
         self.session.commit()
         return
 
+    def get_friend(self, friend_id, user_id) -> User:
+        friendship = self.session.query(tables.Friend).filter_by(user_id=user_id, friend_id=friend_id).first()
+        if not friendship:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+        return self.session.query(tables.User).filter_by(id=friend_id).first()
+
 

@@ -30,3 +30,11 @@ def get_all_friends(
     user: User = Depends(get_current_user)
 ):
     return service.get_all_friends(user.id)
+
+@router.get('/{friend_id}/', response_model=User)
+def get_friend(
+    friend_id: int,
+    service: FriendService = Depends(),
+    user: User = Depends(get_current_user)
+):
+    return service.get_friend(friend_id, user.id)
