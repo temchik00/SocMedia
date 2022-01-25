@@ -1,11 +1,13 @@
 from datetime import datetime, timedelta
-from email.policy import HTTP
+from typing import List, Optional
 from fastapi import HTTPException, status, Depends
 from fastapi.security import OAuth2PasswordBearer
 from passlib.hash import bcrypt
 from jose import JWTError, jwt
 from sqlalchemy.orm import Session 
-from models.user import User, UserCreate, UserUpdate
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
+from models.user import User, UserCreate, UserUpdate, UserFilter
 from models.user import Token
 from settings import settings
 from database import get_session
@@ -113,3 +115,29 @@ class UserService:
         if not user:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
         return user
+
+    def filter_users(
+        self, 
+        first_name: Optional[str]=None,
+        last_name: Optional[str]=None,
+        sex: Optional[int]=None,
+        city: Optional[int]=None,
+        younger: Optional[int]=None,
+        older: Optional[int]=None
+    ) -> List[User]:
+        query = self.session.query(tables.User)
+        if first_name:
+            query = query.filter(tables.User.first_name.contains(first_name))
+        if last_name:
+            query = query.filter(tables.User.last_name.contains(last_name))
+        if city:
+            query = query.filter(tables.User.city == city)
+        if sex:
+            query = query.filter(tables.User.sex == sex)
+        if younger:
+            date = datetime.now() - relativedelta(years=younger)
+            query = query.filter(tables.User.birth_date > date)
+        if older:
+            date = datetime.now() - relativedelta(years=older)
+            query = query.filter(tables.User.birth_date < date)
+        return query.all()

@@ -1,9 +1,11 @@
 from fastapi import APIRouter, Depends, status
 from fastapi.security import OAuth2PasswordRequestForm
+from typing import List, Optional
 from models.user import (
     User,
     UserCreate,
     UserUpdate,
+    UserFilter,
     Token
 )
 from services.user import UserService, get_current_user
@@ -47,3 +49,22 @@ def update_self(
     service: UserService = Depends()
 ):
     return service.update_user(user.id, user_data)
+
+@router.get('/filter/', response_model=List[User])
+def filter_users(
+    first_name: Optional[str]=None,
+    last_name: Optional[str]=None,
+    sex: Optional[int]=None,
+    city: Optional[int]=None,
+    younger: Optional[int]=None,
+    older: Optional[int]=None,
+    service: UserService = Depends()
+):
+    return service.filter_users(
+        first_name,
+        last_name,
+        sex,
+        city,
+        younger,
+        older
+    )
