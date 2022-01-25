@@ -5,7 +5,6 @@ from models.user import (
     User,
     UserCreate,
     UserUpdate,
-    UserFilter,
     Token
 )
 from services.user import UserService, get_current_user
@@ -58,6 +57,7 @@ def filter_users(
     city: Optional[int]=None,
     younger: Optional[int]=None,
     older: Optional[int]=None,
+    page_number: Optional[int]=None,
     service: UserService = Depends()
 ):
     return service.filter_users(

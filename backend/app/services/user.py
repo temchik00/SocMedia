@@ -7,7 +7,7 @@ from jose import JWTError, jwt
 from sqlalchemy.orm import Session 
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
-from models.user import User, UserCreate, UserUpdate, UserFilter
+from models.user import User, UserCreate, UserUpdate
 from models.user import Token
 from settings import settings
 from database import get_session
@@ -123,7 +123,8 @@ class UserService:
         sex: Optional[int]=None,
         city: Optional[int]=None,
         younger: Optional[int]=None,
-        older: Optional[int]=None
+        older: Optional[int]=None,
+        page_number: Optional[int]=None
     ) -> List[User]:
         query = self.session.query(tables.User)
         if first_name:
@@ -140,4 +141,7 @@ class UserService:
         if older:
             date = datetime.now() - relativedelta(years=older)
             query = query.filter(tables.User.birth_date < date)
+        query.limit(settings.user_count_in_responce)
+        if page_number:
+            query.offset(page_number * settings.user_count_in_responce)
         return query.all()

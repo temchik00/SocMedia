@@ -7,6 +7,8 @@ class Settings(BaseSettings):
     secret: str
     jwt_algorithm: str = 'HS256'
     jwt_lifetime: int = 3600
+    user_count_in_responce: int = 15
+    message_count_in_responce: int = 30
 
 settings = Settings(
     _env_file='.env',

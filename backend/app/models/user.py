@@ -32,16 +32,6 @@ class UserUpdate(BaseModel):
     avatar: Optional[str]
 
 
-class UserFilter(BaseModel):
-    first_name: Optional[str]
-    last_name: Optional[str]
-    sex: Optional[int]
-    city: Optional[int]
-    younger: Optional[int]
-    older: Optional[int]
-
-
-
 class Token(BaseModel):
     access_token: str
     token_type: str = 'bearer'
