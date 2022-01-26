@@ -1,7 +1,6 @@
-from time import timezone
-from sqlalchemy import Column, Integer, VARCHAR, ForeignKey, DateTime, Text, Date
+from sqlalchemy import (Column, Integer, VARCHAR, ForeignKey,
+                        DateTime, Text, Date)
 from sqlalchemy.sql import func
-from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 
 
@@ -52,7 +51,8 @@ class Publication(Base):
 class Like(Base):
     __tablename__ = 'like'
     user_id = Column(Integer, ForeignKey('user.id'), primary_key=True)
-    publication_id = Column(Integer, ForeignKey('publication.id'), primary_key=True)
+    publication_id = Column(Integer, ForeignKey('publication.id'),
+                            primary_key=True)
 
 
 class Chat(Base):

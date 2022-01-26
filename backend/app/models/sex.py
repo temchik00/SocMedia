@@ -7,8 +7,9 @@ class SexBase(BaseModel):
 
 class Sex(SexBase):
     id: int
+
     class Config:
-        orm_mode=True
+        orm_mode = True
 
 
 class SexCreate(SexBase):

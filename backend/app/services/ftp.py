@@ -1,4 +1,4 @@
-from fastapi import UploadFile, HTTPException, status, Depends
+from fastapi import UploadFile, HTTPException, status
 from os import listdir, getcwd
 from os.path import join, isfile
 
@@ -7,7 +7,7 @@ class FtpService:
     def __init__(self):
         self.filedir = join(getcwd(), 'app', 'files')
 
-    async def save(self, file:UploadFile):
+    async def save(self, file: UploadFile):
         number: int = len(listdir(self.filedir))
         filename: str = f'{number}.{file.filename.split(".")[-1]}'
         with open(join(self.filedir, filename), 'wb') as image:
@@ -15,7 +15,7 @@ class FtpService:
             image.write(content)
             image.close()
         return filename
-    
+
     def get_path(self, filename: str):
         filepath: str = join(self.filedir, filename)
         if isfile(filepath):

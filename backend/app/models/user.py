@@ -16,8 +16,9 @@ class User(UserBase):
     birth_date: Optional[date]
     phone: Optional[str]
     avatar: Optional[str]
+
     class Config:
-        orm_mode=True
+        orm_mode = True
 
 
 class UserCreate(UserBase):

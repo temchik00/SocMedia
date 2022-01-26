@@ -8,11 +8,11 @@ class PublicationBase(BaseModel):
     image: Optional[str]
 
 
-
 class Publication(PublicationBase):
     id: int
     user_id: int
     time_posted: datetime
+
     class Config:
         orm_mode = True
 

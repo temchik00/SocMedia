@@ -7,8 +7,9 @@ class CityBase(BaseModel):
 
 class City(CityBase):
     id: int
+
     class Config:
-        orm_mode=True
+        orm_mode = True
 
 
 class CityCreate(CityBase):

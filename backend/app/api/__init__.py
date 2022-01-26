@@ -5,6 +5,7 @@ from .city import router as city_router
 from .sex import router as sex_router
 from .publication import router as publication_router
 from .friend import router as friend_router
+from .chat import router as chat_router
 
 router = APIRouter()
 router.include_router(ftp_router)
@@ -13,3 +14,4 @@ router.include_router(city_router)
 router.include_router(sex_router)
 router.include_router(publication_router)
 router.include_router(friend_router)
+router.include_router(chat_router)
