@@ -17,6 +17,7 @@ import { User } from '../../Interfaces/user';
   styleUrls: ['./profile.component.scss'],
 })
 export class ProfileComponent implements OnInit {
+  public userId: number = -1;
   public user: User = {
     id: -1,
     first_name: '',
@@ -39,6 +40,10 @@ export class ProfileComponent implements OnInit {
 
   public publications: Publication[] = [];
 
+  public viewedByMe: boolean = false;
+  public viewedByAuthorized: boolean = false;
+  public isFriend: boolean = false;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -51,9 +56,10 @@ export class ProfileComponent implements OnInit {
   ngOnInit(): void {
     this.route.queryParamMap.subscribe(async (params: ParamMap) => {
       if (!params.has('id')) {
-        await this.redirectFromNoId(this.auth.isAuthorzed.value);
+        await this.redirectFromNoId(this.auth.isAuthorized.value);
       } else {
         let id = +(<string>params.get('id'));
+        this.userId = id;
         this.user = await this.userService.getUser(id);
         this.publications = await this.publicationService.getPublications(id);
       }
@@ -64,6 +70,19 @@ export class ProfileComponent implements OnInit {
     this.misc.getSexes().then((sexes: Sex[]) => {
       this.sexes = sexes;
     });
+    this.userService.userInitialized.subscribe(
+      async (isInitialized: boolean) => {
+        if (isInitialized) {
+          this.viewedByAuthorized = this.userService.userId >= 0;
+          this.viewedByMe =
+            this.viewedByAuthorized && this.userId === this.userService.userId;
+          this.isFriend =
+            this.viewedByAuthorized &&
+            !this.viewedByMe &&
+            (await this.userService.hasFriend(this.userId));
+        }
+      }
+    );
   }
 
   private redirectToUserPage(id: number): void {
@@ -75,8 +94,8 @@ export class ProfileComponent implements OnInit {
   }
 
   private redirectToOwnPage(): void {
-    if (this.user.id != -1) {
-      this.redirectToUserPage(this.user.id);
+    if (this.userService.userId >= 0) {
+      this.redirectToUserPage(this.userService.userId);
     }
   }
 
@@ -92,7 +111,7 @@ export class ProfileComponent implements OnInit {
       this.router.navigate(['/registration']);
       return;
     }
-    let isAuthed = await firstValueFrom(this.auth.isAuthorzed);
+    let isAuthed = await firstValueFrom(this.auth.isAuthorized);
     await this.redirectFromNoId(isAuthed);
     return;
   }
@@ -121,16 +140,12 @@ export class ProfileComponent implements OnInit {
       data.birth_date = this.user.birth_date;
     }
     await this.userService.updateSelf(data);
-    let params = this.route.snapshot.queryParamMap;
-    let id = +(<string>params.get('id'));
-    this.user = await this.userService.getUser(id);
+    this.user = await this.userService.getUser(this.userId);
     this.isRedacting = false;
   }
 
   public async revertUserChanges(): Promise<void> {
-    let params = this.route.snapshot.queryParamMap;
-    let id = +(<string>params.get('id'));
-    this.user = await this.userService.getUser(id);
+    this.user = await this.userService.getUser(this.userId);
     this.isRedacting = false;
   }
 
@@ -146,9 +161,7 @@ export class ProfileComponent implements OnInit {
   public async updateAvatar(): Promise<void> {
     if (this.avatar) {
       await this.userService.updateAvatar(this.avatar);
-      let params = this.route.snapshot.queryParamMap;
-      let id = +(<string>params.get('id'));
-      this.user = await this.userService.getUser(id);
+      this.user = await this.userService.getUser(this.userId);
       this.avatar = undefined;
     }
   }
@@ -185,9 +198,29 @@ export class ProfileComponent implements OnInit {
       this.publicationText = '';
       this.publicationImage = undefined;
       this.publicationImageUrl = undefined;
-      let params = this.route.snapshot.queryParamMap;
-      let id = +(<string>params.get('id'));
-      this.publications = await this.publicationService.getPublications(id);
+      this.publications = await this.publicationService.getPublications(
+        this.userId
+      );
+    }
+  }
+
+  public async addFriend(): Promise<void> {
+    if (this.viewedByAuthorized && !this.viewedByMe) {
+      await this.userService.addFriend(this.userId);
+      this.isFriend =
+        this.viewedByAuthorized &&
+        !this.viewedByMe &&
+        (await this.userService.hasFriend(this.userId));
+    }
+  }
+
+  public async removeFriend(): Promise<void> {
+    if (this.viewedByAuthorized && !this.viewedByMe) {
+      await this.userService.deleteFriend(this.userId);
+      this.isFriend =
+        this.viewedByAuthorized &&
+        !this.viewedByMe &&
+        (await this.userService.hasFriend(this.userId));
     }
   }
 }

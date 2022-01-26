@@ -18,14 +18,16 @@ export class AuthService {
   private password: string | undefined;
   private accessToken: string | undefined;
   private refreshSubscription: any | undefined;
-  public isAuthorzed: BehaviorSubject<boolean | undefined> =
-    new BehaviorSubject<boolean | undefined>(false);
+  public isAuthorized: BehaviorSubject<boolean | undefined> =
+    new BehaviorSubject<boolean | undefined>(undefined);
 
   constructor(private httpClient: HttpClient, private cookie: CookieService) {
     if (cookie.check('email') && cookie.check('password')) {
       let email = cookie.get('email');
       let password = cookie.get('password');
       this.logIn(email, password);
+    } else {
+      this.isAuthorized.next(false);
     }
   }
 
@@ -71,7 +73,7 @@ export class AuthService {
     if (result) {
       this.cookie.set('email', email, undefined, '/');
       this.cookie.set('password', password, undefined, '/');
-      this.isAuthorzed.next(true);
+      this.isAuthorized.next(true);
       this.refreshSubscription = setInterval(() => {
         this.authorize();
       }, this.tokenLifetime * 0.9 * 1000);
@@ -82,7 +84,7 @@ export class AuthService {
     this.email = undefined;
     this.password = undefined;
     this.accessToken = undefined;
-    this.isAuthorzed.next(false);
+    this.isAuthorized.next(false);
     if (this.cookie.check('email')) this.cookie.delete('email');
     if (this.cookie.check('password')) this.cookie.delete('password');
     if (this.refreshSubscription != undefined) {
@@ -109,7 +111,7 @@ export class AuthService {
         this.email = email;
         this.password = password;
         this.accessToken = tokens.access_token;
-        this.isAuthorzed.next(true);
+        this.isAuthorized.next(true);
         this.refreshSubscription = setInterval(() => {
           this.authorize();
         }, this.tokenLifetime * 0.9 * 1000);

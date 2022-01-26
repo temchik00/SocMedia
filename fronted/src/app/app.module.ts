@@ -14,6 +14,9 @@ import { ChatComponent } from './Components/chat/chat.component';
 import { LeftMenuComponent } from './Components/left-menu/left-menu.component';
 import { PublicationComponent } from './Components/publication/publication.component';
 import { DropdownSelectComponent } from './Components/dropdown-select/dropdown-select.component';
+import { FriendsComponent } from './Components/friends/friends.component';
+import { PeopleComponent } from './Components/people/people.component';
+import { UserMiniatureComponent } from './Components/user-miniature/user-miniature.component';
 
 registerLocaleData(localeRu, 'ru');
 
@@ -26,6 +29,9 @@ registerLocaleData(localeRu, 'ru');
     LeftMenuComponent,
     PublicationComponent,
     DropdownSelectComponent,
+    FriendsComponent,
+    PeopleComponent,
+    UserMiniatureComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule, FormsModule],
   providers: [DatePipe, { provide: LOCALE_ID, useValue: 'ru' }],

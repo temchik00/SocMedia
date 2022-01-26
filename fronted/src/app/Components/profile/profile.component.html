@@ -11,13 +11,31 @@
           onerror="this.onerror=null; this.src='assets\\images\\nophoto.svg'"
         />
         <input
-          *ngIf="this.userService.userId === user.id"
+          *ngIf="viewedByMe"
           type="file"
           class="avatar-selector"
           (change)="selectAvatar($event)"
         />
-        <button class="apply-button" *ngIf="avatar" (click)="updateAvatar()">
+        <button
+          class="apply-button avatar-button"
+          *ngIf="avatar"
+          (click)="updateAvatar()"
+        >
           Загрузить
+        </button>
+        <button
+          class="apply-button avatar-button"
+          *ngIf="viewedByAuthorized && !viewedByMe && !isFriend"
+          (click)="addFriend()"
+        >
+          Добавить в друзья
+        </button>
+        <button
+          class="apply-button avatar-button"
+          *ngIf="viewedByAuthorized && !viewedByMe && isFriend"
+          (click)="removeFriend()"
+        >
+          Удалить из друзей
         </button>
       </div>
       <div class="profile-right">
@@ -47,7 +65,7 @@
               <div class="entry" *ngIf="isRedacting === true">
                 <input
                   type="date"
-                  class="info-input"
+                  class="info-input bright-input"
                   [(ngModel)]="user.birth_date"
                 />
               </div>
@@ -68,12 +86,12 @@
               <div class="entry" *ngIf="isRedacting === true">
                 <input
                   type="text"
-                  class="info-input"
+                  class="info-input bright-input"
                   [(ngModel)]="user.phone"
                 />
               </div>
             </div>
-            <div class="buttons" *ngIf="this.userService.userId === user.id">
+            <div class="buttons" *ngIf="viewedByMe">
               <button
                 class="apply-button"
                 *ngIf="isRedacting"
@@ -100,7 +118,7 @@
         </div>
         <div
           class="post-publication tile"
-          *ngIf="this.userService.userId === user.id"
+          *ngIf="viewedByAuthorized && viewedByMe"
         >
           <textarea
             class="publication-text"

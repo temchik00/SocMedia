@@ -1,0 +1,42 @@
+.header {
+  font-size: 1.4rem;
+  line-height: 1.4rem;
+}
+
+.line {
+  background: rgb(173, 186, 199);
+  width: 100%;
+  height: 1px;
+  margin: 10px 0;
+}
+
+.people-container {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+}
+
+.filters-container {
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+}
+
+.filter-container {
+  display: flex;
+  flex-direction: column;
+  row-gap: 3px;
+}
+
+.bright-input {
+  width: 200px;
+}
+
+.label {
+  font-size: 1rem;
+}
+
+.apply-button {
+  width: 100%;
+  margin-top: 10px;
+}

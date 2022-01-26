@@ -21,7 +21,7 @@ export class AuthComponent implements OnInit {
   constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
-    this.authService.isAuthorzed.subscribe((isAuth: boolean | undefined) => {
+    this.authService.isAuthorized.subscribe((isAuth: boolean | undefined) => {
       if (isAuth === true) {
         this.router.navigate(['/profile']);
       }

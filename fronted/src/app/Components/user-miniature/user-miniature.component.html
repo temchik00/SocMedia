@@ -1,0 +1,14 @@
+<div class="user-container" *ngIf="user">
+  <div
+    class="inner-container"
+    routerLink="/profile"
+    [queryParams]="{ id: user.id }"
+  >
+    <img
+      class="avatar"
+      src="{{ apiUrl + '/file/' + user.avatar }}"
+      onerror="this.onerror=null; this.src='assets\\images\\nophoto.svg'"
+    />
+    <div class="name">{{ user.first_name }} {{ user.last_name }}</div>
+  </div>
+</div>

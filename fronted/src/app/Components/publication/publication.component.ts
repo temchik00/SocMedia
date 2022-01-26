@@ -5,6 +5,7 @@ import { PublicationService } from '../../Shared/publication.service';
 import { environment } from 'src/environments/environment';
 import { UserService } from 'src/app/Shared/user.service';
 import { AuthService } from 'src/app/Shared/auth.service';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-publication',
@@ -34,6 +35,13 @@ export class PublicationComponent implements OnInit {
 
   ngOnInit(): void {
     this.getLikes();
+    this.userService.userInitialized.subscribe((initialized: boolean) => {
+      if (initialized) {
+        this.isLiked =
+          this.likes.includes(this.userService.userId) &&
+          this.userService.userId >= 0;
+      }
+    });
   }
 
   private getLikes(): void {
@@ -43,13 +51,13 @@ export class PublicationComponent implements OnInit {
         .then((likes: number[]) => {
           this.likes = likes;
           this.isLiked =
-            this.userService.userId >= 0 &&
-            this.likes.includes(this.userService.userId);
+            this.likes.includes(this.userService.userId) &&
+            this.userService.userId >= 0;
         });
   }
 
   public async toggleLike(): Promise<void> {
-    if (this.authService.isAuthorzed.value && this.publication) {
+    if (this.authService.isAuthorized.value && this.publication) {
       await this.publicationService.toggleLike(
         this.publication.id,
         this.authService.getTokenHeader()

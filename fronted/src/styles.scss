@@ -19,18 +19,22 @@ body {
 .right-column {
   flex-grow: 1;
   flex-basis: 0;
-}
-
-.left-column {
+  display: flex;
   position: sticky;
   top: 50px;
-  display: flex;
-  justify-content: flex-end;
   align-self: flex-start;
 }
 
+.left-column {
+  justify-content: flex-end;
+}
+
+.right-column {
+  justify-content: flex-start;
+}
+
 .content {
-  width: 1120px;
+  width: 1020px;
 }
 
 .tile {
@@ -41,7 +45,7 @@ body {
 }
 
 .apply-button {
-  margin-top: auto;
+  // margin-top: auto;
   font-size: 1rem;
   cursor: pointer;
   border: none;
@@ -59,4 +63,16 @@ body {
 
 .apply-button:active {
   background: rgba(34, 39, 46, 0.8);
+}
+
+.bright-input {
+  border: 1px solid rgba(0, 0, 0, 0);
+  outline: none;
+  box-sizing: border-box;
+  height: 34.8px;
+  padding: 2px 6px;
+  font-size: 1rem;
+  background: rgb(34, 39, 46);
+  color: rgb(173, 186, 199);
+  border-radius: 3px;
 }

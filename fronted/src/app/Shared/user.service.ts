@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, firstValueFrom, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -12,22 +12,29 @@ import { MiscService } from './misc.service';
 export class UserService {
   private user: User | undefined;
   public userId: number = -2;
+  public userInitialized: BehaviorSubject<boolean> =
+    new BehaviorSubject<boolean>(false);
 
   constructor(
     private auth: AuthService,
     private misc: MiscService,
     private httpClient: HttpClient
   ) {
-    this.auth.isAuthorzed.subscribe(
+    this.auth.isAuthorized.subscribe(
       async (isAuthorized: boolean | undefined) => {
         if (isAuthorized === true) {
           this.user = await this.getSelf();
           this.userId = this.user.id;
+          this.userInitialized.next(true);
+          return;
         }
         if (isAuthorized === false) {
           this.user = undefined;
           this.userId = -2;
+          this.userInitialized.next(true);
+          return;
         }
+        this.userInitialized.next(false);
       }
     );
   }
@@ -122,6 +129,75 @@ export class UserService {
     }
     await firstValueFrom(
       this.httpClient.post(environment.apiUrl + '/publication/', body, {
+        headers: this.auth.getTokenHeader(),
+      })
+    );
+  }
+
+  public async filterUsers(
+    first_name?: string,
+    last_name?: string,
+    sex?: number,
+    city?: number,
+    younger?: number,
+    older?: number,
+    page_number?: number,
+    exclude_user?: number
+  ): Promise<UserResponse[]> {
+    let params = new HttpParams();
+    if (first_name) params = params.set('first_name', first_name);
+    if (last_name) params = params.set('last_name', last_name);
+    if (sex) params = params.set('sex', sex);
+    if (city) params = params.set('city', city);
+    if (younger) params = params.set('younger', younger);
+    if (older) params = params.set('older', older);
+    if (page_number) params = params.set('page_number', page_number);
+    if (exclude_user) params = params.set('exclude_user', exclude_user);
+    let users: UserResponse[] = await firstValueFrom(
+      this.httpClient.get<UserResponse[]>(
+        environment.apiUrl + '/user/filter/',
+        { params: params }
+      )
+    );
+    return Promise.resolve(users);
+  }
+
+  public async hasFriend(friendId: number): Promise<boolean> {
+    try {
+      await firstValueFrom(
+        this.httpClient.get(`${environment.apiUrl}/friend/${friendId}/`, {
+          headers: this.auth.getTokenHeader(),
+        })
+      );
+      return Promise.resolve(true);
+    } catch (error) {
+      return Promise.resolve(false);
+    }
+  }
+
+  public async addFriend(friendId: number): Promise<void> {
+    await firstValueFrom(
+      this.httpClient.post(
+        `${environment.apiUrl}/friend/${friendId}/`,
+        {},
+        {
+          headers: this.auth.getTokenHeader(),
+        }
+      )
+    );
+  }
+
+  public async deleteFriend(friendId: number): Promise<void> {
+    await firstValueFrom(
+      this.httpClient.delete(`${environment.apiUrl}/friend/${friendId}/`, {
+        headers: this.auth.getTokenHeader(),
+      })
+    );
+  }
+
+  public async getFriends(): Promise<UserResponse[]> {
+    return firstValueFrom(
+      this.httpClient.get<UserResponse[]>(environment.apiUrl + '/friend/all/', {
         headers: this.auth.getTokenHeader(),
       })
     );

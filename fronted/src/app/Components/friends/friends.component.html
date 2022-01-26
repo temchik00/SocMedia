@@ -1,0 +1,31 @@
+<div class="container">
+  <div class="left-column">
+    <app-left-menu></app-left-menu>
+  </div>
+  <div class="content tile">
+    <div class="header">Друзья</div>
+    <div class="line"></div>
+    <div class="friends-container">
+      <div class="friend" *ngFor="let friend of friends">
+        <img
+          routerLink="/profile"
+          [queryParams]="{ id: friend.id }"
+          src="{{ apiUrl + '/file/' + friend.avatar }}"
+          onerror="this.onerror=null; this.src='assets\\images\\nophoto.svg'"
+          class="avatar"
+        />
+        <div
+          class="name"
+          routerLink="/profile"
+          [queryParams]="{ id: friend.id }"
+        >
+          {{ friend.first_name }} {{ friend.last_name }}
+        </div>
+        <button class="apply-button" (click)="removeFriend(friend.id)">
+          Убрать из друзей
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="right-column"></div>
+</div>

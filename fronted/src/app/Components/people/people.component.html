@@ -1,0 +1,54 @@
+<div class="container">
+  <div class="left-column">
+    <app-left-menu></app-left-menu>
+  </div>
+  <div class="content tile">
+    <div class="header">Поиск людей</div>
+    <div class="line"></div>
+    <div class="people-container">
+      <app-user-miniature
+        *ngFor="let user of users"
+        [user]="user"
+      ></app-user-miniature>
+    </div>
+  </div>
+  <div class="right-column">
+    <div class="tile">
+      <div class="header">Фильтры</div>
+      <div class="line"></div>
+      <div class="filters-container">
+        <div class="filter-container">
+          <div class="label">Имя</div>
+          <input type="text" class="bright-input" [(ngModel)]="firstName" />
+        </div>
+        <div class="filter-container">
+          <div class="label">Фамилия</div>
+          <input type="text" class="bright-input" [(ngModel)]="lastName" />
+        </div>
+        <div class="filter-container">
+          <div class="label">Город</div>
+          <app-dropdown-select
+            [options]="cities"
+            [(selectedOption)]="city"
+          ></app-dropdown-select>
+        </div>
+        <div class="filter-container">
+          <div class="label">Пол</div>
+          <app-dropdown-select
+            [options]="sexes"
+            [(selectedOption)]="sex"
+          ></app-dropdown-select>
+        </div>
+        <div class="filter-container">
+          <div class="label">Моложе</div>
+          <input type="text" class="bright-input" [(ngModel)]="younger" />
+        </div>
+        <div class="filter-container">
+          <div class="label">Старше</div>
+          <input type="text" class="bright-input" [(ngModel)]="older" />
+        </div>
+      </div>
+      <button class="apply-button" (click)="applyFilter()">Найти</button>
+    </div>
+  </div>
+</div>

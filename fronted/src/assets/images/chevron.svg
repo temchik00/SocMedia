@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="17" height="8" viewBox="0 0 17 8">
-    <g fill="none" fill-rule="evenodd" opacity=".302">
-        <g fill="#000" fill-rule="nonzero">
+    <g fill="none" fill-rule="evenodd" opacity="1">
+        <g fill="#ADBAC7" fill-rule="nonzero">
             <path d="M7.445 6.572L1.067.18C.827-.06.437-.06.197.18c-.241.24-.241.63-.001.87l6.378 6.392c.24.24.24.63 0 .87L.196 14.705c-.24.24-.24.63 0 .87.12.12.278.18.435.18.158 0 .316-.06.436-.18l6.377-6.392c.72-.72.72-1.89 0-2.61z" transform="translate(-359.000000, -1919.000000) translate(131.000000, 1600.000000) translate(0.000000, 307.000000) translate(236.753846, 16.000000) rotate(90.000000) translate(-236.753846, -16.000000) translate(232.753846, 8.000000)"/>
         </g>
     </g>

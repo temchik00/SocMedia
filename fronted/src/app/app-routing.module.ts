@@ -3,6 +3,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { AuthComponent } from './Components/auth/auth.component';
 import { ProfileComponent } from './Components/profile/profile.component';
 import { ChatComponent } from './Components/chat/chat.component';
+import { PeopleComponent } from './Components/people/people.component';
+import { FriendsComponent } from './Components/friends/friends.component';
 
 const routes: Routes = [
   {
@@ -16,6 +18,14 @@ const routes: Routes = [
   {
     component: AuthComponent,
     path: 'registration',
+  },
+  {
+    component: PeopleComponent,
+    path: 'people',
+  },
+  {
+    component: FriendsComponent,
+    path: 'friends',
   },
   {
     path: '',
