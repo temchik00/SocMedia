@@ -4,7 +4,8 @@ from fastapi import (
     Depends,
     status,
     WebSocket,
-    WebSocketDisconnect
+    WebSocketDisconnect,
+    Query
 )
 from models.user import User
 from models.chat import Chat, ChatCreate, UsersToAdd
@@ -98,16 +99,6 @@ def get_last_message(
 ):
     return service.get_last_message(chat_id, user.id)
 
-# @router.post('/{chat_id}/messages/', response_model=Message,
-#             status_code=status.HTTP_201_CREATED)
-# def add_message(
-#     chat_id: int,
-#     message_data: MessageCreate,
-#     service: ChatService=Depends(),
-#     user: User = Depends(get_current_user)
-# ):
-#     return service.add_message(chat_id, user.id, message_data)
-
 
 class ConnectionManager:
     def __init__(self):
@@ -120,19 +111,25 @@ class ConnectionManager:
     def disconnect(self, websocket: WebSocket):
         self.active_connections.remove(websocket)
 
-    async def broadcast(self, message: str):
+    async def broadcast(self, message: Message):
+        json_message = {
+            'id': message.id,
+            'content': message.content,
+            'time_posted': message.time_posted.isoformat(),
+            'user_id': message.user_id
+        }
         for connection in self.active_connections:
-            await connection.send_text(message)
+            await connection.send_json(json_message)
 
 
 managers = {}
 
 
-@router.websocket('/{chat_id}/')
+@router.websocket('/chat/{chat_id}/')
 async def websocket_endpoint(
     websocket: WebSocket,
     chat_id: int,
-    token: str,
+    token: Optional[str] = Query(None),
     chatService: ChatService = Depends(),
     userService: UserService = Depends()
 ):
@@ -145,8 +142,8 @@ async def websocket_endpoint(
         await manager.connect(websocket)
         try:
             while True:
-                content = await websocket.receive_text()
-                chatService.add_message(chat_id, user.id, content)
-                await manager.broadcast(content)
+                content = await websocket.receive_json()
+                message = chatService.add_message(chat_id, user.id, content)
+                await manager.broadcast(message)
         except WebSocketDisconnect:
             manager.disconnect(websocket)

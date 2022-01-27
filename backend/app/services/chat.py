@@ -109,7 +109,7 @@ class ChatService:
         if message_from:
             query = query.filter(tables.ChatMessage.id < message_from)
         query = query.limit(page_size)
-        return query.all()
+        return query.all()[::-1]
 
     def get_last_message(self, chat_id: int, user_id: int) -> Message:
         if not self.__in_chat__(chat_id, user_id):

@@ -8,7 +8,7 @@ class Settings(BaseSettings):
     server_port: int = 8005
     jwt_algorithm: str = 'HS256'
     jwt_lifetime: int = 3600
-    user_count_in_responce: int = 42
+    user_count_in_response: int = 42
 
 
 settings = Settings(

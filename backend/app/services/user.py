@@ -157,9 +157,9 @@ class UserService:
         if exclude_user:
             query = query.filter(tables.User.id != exclude_user)
         query = query.order_by(tables.User.id.desc()).\
-            limit(settings.user_count_in_responce)
+            limit(settings.user_count_in_response)
         if page_number:
-            query = query.offset(page_number * settings.user_count_in_responce)
+            query = query.offset(page_number * settings.user_count_in_response)
         return query.all()
 
     def get_user_from_token(self, token: str) -> Optional[User]:
