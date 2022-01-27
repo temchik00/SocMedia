@@ -1,1 +1,21 @@
-<p>chat works!</p>
+<div class="container">
+  <div class="left-column">
+    <app-left-menu></app-left-menu>
+  </div>
+  <div class="content tile">
+    <div class="opened-chat" *ngIf="chatService.chat">
+      <div class="viewer-container">
+        <app-chat-viewer></app-chat-viewer>
+      </div>
+      <div class="vertical-line"></div>
+    </div>
+
+    <app-chat-selector
+      [chats]="chats"
+      [style.flex]="chatService.chat ? '0 0 0' : '1 1 auto'"
+    ></app-chat-selector>
+  </div>
+  <div class="right-column"></div>
+</div>
+<app-create-chat-modal></app-create-chat-modal>
+<app-alter-chat-modal></app-alter-chat-modal>

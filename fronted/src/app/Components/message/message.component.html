@@ -1,0 +1,16 @@
+<div class="message-container" *ngIf="message">
+  <img
+    src="{{ apiUrl + '/file/' + message.user.avatar }}"
+    onerror="this.onerror=null; this.src='assets\\images\\nophoto.svg'"
+    class="avatar"
+  />
+  <div class="other">
+    <div class="header">
+      <div class="name">
+        {{ message.user.first_name }} {{ message.user.last_name }}
+      </div>
+      <div class="time">{{ message.time_posted | date: "HH:mm" }}</div>
+    </div>
+    <div class="message">{{ message.content }}</div>
+  </div>
+</div>

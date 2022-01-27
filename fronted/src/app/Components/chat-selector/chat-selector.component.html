@@ -1,0 +1,19 @@
+<div class="chat-selector-container">
+  <div class="header-container">
+    <div class="header">Чаты</div>
+    <div
+      class="apply-button"
+      *ngIf="!chatService.chat"
+      (click)="modals.openCreateChat()"
+    >
+      Создать чат
+    </div>
+  </div>
+  <div class="line"></div>
+  <div class="chats-container scrollable">
+    <app-chat-miniature
+      *ngFor="let chat of chats"
+      [chat]="chat"
+    ></app-chat-miniature>
+  </div>
+</div>

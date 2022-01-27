@@ -1,0 +1,34 @@
+.miniature-container {
+  display: flex;
+  column-gap: 10px;
+  align-items: center;
+  cursor: pointer;
+  min-width: 200px;
+}
+
+.avatar {
+  border-radius: 50%;
+  width: 72px;
+  height: 72px;
+  object-fit: cover;
+  object-position: center;
+}
+
+.other {
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+  flex: 1 1 auto;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+}
+
+.name {
+  font-size: 1.2rem;
+}
+.time {
+  margin-left: auto;
+}

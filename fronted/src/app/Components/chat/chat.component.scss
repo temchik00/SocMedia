@@ -1,0 +1,23 @@
+.container {
+  max-height: 98vh;
+}
+
+.content {
+  display: flex;
+}
+
+.opened-chat {
+  display: flex;
+  flex: 1 1 auto;
+}
+
+.vertical-line {
+  background: rgb(173, 186, 199);
+  height: 100%;
+  width: 1px;
+  margin: 0 10px;
+}
+
+.viewer-container {
+  flex: 1 1 auto;
+}

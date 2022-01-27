@@ -1,0 +1,28 @@
+<div class="chat-container" *ngIf="chat">
+  <div class="header">
+    <img
+      src="{{ apiUrl + '/file/' + chat.image }}"
+      onerror="this.onerror=null; this.src='assets\\images\\nophoto.svg'"
+      class="avatar"
+    />
+    <div class="name">{{ chat.name }}</div>
+    <div class="apply-button invite-button" (click)="modals.openUpdateChat()">
+      Пригласить
+    </div>
+  </div>
+  <div class="line"></div>
+  <div #messagesContainer class="message-zone scrollable">
+    <app-message
+      *ngFor="let message of messages"
+      [message]="message"
+    ></app-message>
+  </div>
+  <div class="line"></div>
+  <div class="input-zone">
+    <textarea
+      class="message-input scrollable"
+      [(ngModel)]="messageText"
+    ></textarea>
+    <button class="apply-button" (click)="sendMessage()">Отправить</button>
+  </div>
+</div>

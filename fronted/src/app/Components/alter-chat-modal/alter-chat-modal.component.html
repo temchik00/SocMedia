@@ -1,0 +1,48 @@
+<div class="modal-container" *ngIf="modals.updateVisible">
+  <div class="modal">
+    <div class="header">Добавление друзей</div>
+    <div class="line"></div>
+    <div class="friends-container scrollable">
+      <div class="friend" *ngFor="let friend of modals.friends">
+        <img
+          src="{{ apiUrl + '/file/' + friend.avatar }}"
+          onerror="this.onerror=null; this.src='assets\\images\\nophoto.svg'"
+          class="avatar"
+        />
+        <div class="other">
+          <div class="name">{{ friend.first_name }} {{ friend.last_name }}</div>
+          <div
+            *ngIf="
+              modals.friendsToAdd.includes(friend.id);
+              then remove;
+              else add
+            "
+          ></div>
+          <ng-template #add>
+            <button
+              class="apply-button invite-button"
+              (click)="modals.addFriend(friend.id)"
+            >
+              Пригласить
+            </button>
+          </ng-template>
+          <ng-template #remove>
+            <button
+              class="apply-button invite-button"
+              (click)="modals.removeFriend(friend.id)"
+            >
+              Убрать
+            </button>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+    <button
+      class="apply-button add-button"
+      (click)="modals.closeDispatchUpdateChat()"
+    >
+      Добавить
+    </button>
+  </div>
+  <div class="modal-background" (click)="modals.closeUpdateChat()"></div>
+</div>

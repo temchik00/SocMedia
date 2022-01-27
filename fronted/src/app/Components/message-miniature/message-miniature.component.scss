@@ -1,0 +1,28 @@
+.message-container {
+  display: flex;
+  column-gap: 10px;
+}
+
+.avatar {
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  object-position: center;
+  flex-shrink: 0;
+}
+
+.other {
+  display: flex;
+  flex-direction: column;
+}
+
+.message {
+  margin-top: auto;
+}
+
+.no-message {
+  display: flex;
+  align-items: center;
+  font-size: 1.4rem;
+}

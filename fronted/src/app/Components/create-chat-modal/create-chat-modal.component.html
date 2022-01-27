@@ -1,0 +1,17 @@
+<div class="modal-container" *ngIf="modals.createVisible">
+  <div class="modal">
+    <div class="header">Создание чата</div>
+    <div class="line"></div>
+    <div class="label">Название чата</div>
+    <input type="text" class="bright-input" [(ngModel)]="name" />
+    <div class="label">Аватар чата</div>
+    <input
+      type="file"
+      class="file-input"
+      (change)="selectAvatar($event)"
+      id="fileinput"
+    />
+    <button class="apply-button" (click)="createChat()">Создать</button>
+  </div>
+  <div class="modal-background" (click)="modals.closeCreateChat()"></div>
+</div>

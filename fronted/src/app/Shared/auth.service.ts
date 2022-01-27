@@ -125,4 +125,8 @@ export class AuthService {
   public getTokenHeader(): HttpHeaders {
     return new HttpHeaders().set('Authorization', 'Bearer ' + this.accessToken);
   }
+
+  public getTokenString(): string {
+    return <string>this.accessToken;
+  }
 }

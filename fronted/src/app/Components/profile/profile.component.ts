@@ -43,6 +43,8 @@ export class ProfileComponent implements OnInit {
   public viewedByMe: boolean = false;
   public viewedByAuthorized: boolean = false;
   public isFriend: boolean = false;
+  private avatarInput: HTMLElement | null = null;
+  private postInput: HTMLElement | null = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -83,6 +85,9 @@ export class ProfileComponent implements OnInit {
         }
       }
     );
+
+    this.postInput = document.getElementById('postInput');
+    this.avatarInput = document.getElementById('avatarInput');
   }
 
   private redirectToUserPage(id: number): void {
@@ -160,6 +165,7 @@ export class ProfileComponent implements OnInit {
 
   public async updateAvatar(): Promise<void> {
     if (this.avatar) {
+      (<HTMLInputElement>this.avatarInput).value = '';
       await this.userService.updateAvatar(this.avatar);
       this.user = await this.userService.getUser(this.userId);
       this.avatar = undefined;
@@ -198,6 +204,7 @@ export class ProfileComponent implements OnInit {
       this.publicationText = '';
       this.publicationImage = undefined;
       this.publicationImageUrl = undefined;
+      (<HTMLInputElement>this.postInput).value = '';
       this.publications = await this.publicationService.getPublications(
         this.userId
       );

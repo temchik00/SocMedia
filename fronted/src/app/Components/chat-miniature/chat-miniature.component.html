@@ -1,0 +1,16 @@
+<div class="miniature-container" *ngIf="chat" (click)="selectChat()">
+  <img
+    src="{{ apiUrl + '/file/' + chat.image }}"
+    onerror="this.onerror=null; this.src='assets\\images\\nophoto.svg'"
+    class="avatar"
+  />
+  <div class="other">
+    <div class="header">
+      <div class="name">{{ chat.name }}</div>
+      <div class="time" *ngIf="chat.lastMessage">
+        {{ chat.lastMessage.time_posted | date: "HH:mm" }}
+      </div>
+    </div>
+    <app-message-miniature [message]="chat.lastMessage"></app-message-miniature>
+  </div>
+</div>
