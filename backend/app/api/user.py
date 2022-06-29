@@ -5,7 +5,8 @@ from models.user import (
     User,
     UserCreate,
     UserUpdate,
-    Token
+    Token,
+    EmailExists
 )
 from services.user import UserService, get_current_user
 
@@ -34,26 +35,12 @@ def sign_in(
     )
 
 
-@router.get('/', response_model=User)
-def get_self(user: User = Depends(get_current_user)):
-    return user
-
-
-@router.get('/{user_id}', response_model=User)
-def get_user(
-    user_id: int,
+@router.get('/exists/{email}/', response_model=EmailExists)
+def email_exists(
+    email: str,
     service: UserService = Depends()
 ):
-    return service.get_user(user_id)
-
-
-@router.patch('/', response_model=User)
-def update_self(
-    user_data: UserUpdate,
-    user: User = Depends(get_current_user),
-    service: UserService = Depends()
-):
-    return service.update_user(user.id, user_data)
+    return EmailExists(exists=service.exists(email))
 
 
 @router.get('/filter/', response_model=List[User])
@@ -78,3 +65,25 @@ def filter_users(
         page_number,
         exclude_user
     )
+
+
+@router.get('/', response_model=User)
+def get_self(user: User = Depends(get_current_user)):
+    return user
+
+
+@router.get('/{user_id}/', response_model=User)
+def get_user(
+    user_id: int,
+    service: UserService = Depends()
+):
+    return service.get_user(user_id)
+
+
+@router.patch('/', response_model=User)
+def update_self(
+    user_data: UserUpdate,
+    user: User = Depends(get_current_user),
+    service: UserService = Depends()
+):
+    return service.update_user(user.id, user_data)

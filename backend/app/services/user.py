@@ -168,3 +168,7 @@ class UserService:
             return user
         except Exception:
             return None
+
+    def exists(self, email: str) -> bool:
+        return self.session.query(tables.User).\
+            filter(tables.User.email == email).first() is not None
