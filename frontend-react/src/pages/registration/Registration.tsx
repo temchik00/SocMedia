@@ -1,5 +1,5 @@
 import "./Registration.scss";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import {
     FC,
     FormEvent,
@@ -8,9 +8,12 @@ import {
     useCallback,
     useReducer,
     Dispatch,
+    useContext,
 } from "react";
 import Select from "../../components/Select/Select";
 import { IOption } from "../../interfaces/option";
+import axios from "../../api/axios";
+import { AuthContext } from "../../shared/authContext";
 
 enum Step {
     FIRST,
@@ -50,6 +53,10 @@ interface IRegistrationState {
     familyName: string;
 }
 
+const emailValidator = new RegExp(
+    "^[a-zA-Z0-9._:$!%-]+@[a-zA-Z0-9.-]+.[a-zA-Z]$"
+);
+
 const reducer = (
     state: IRegistrationState,
     action: { type: Action; value: any }
@@ -75,6 +82,8 @@ const reducer = (
 };
 
 const Registration: FC = () => {
+    const { authState, registerUser } = useContext(AuthContext);
+
     const [state, dispatch] = useReducer(reducer, {
         gender: undefined,
         step: Step.FIRST,
@@ -85,7 +94,28 @@ const Registration: FC = () => {
         familyName: "",
     });
 
-    function register(): void {}
+    function validateData(): boolean {
+        return (
+            state.email.length > 0 &&
+            state.password.length >= 8 &&
+            state.password === state.rePassword &&
+            state.name.length > 0 &&
+            state.familyName.length > 0 &&
+            state.gender !== undefined &&
+            emailValidator.test(state.email)
+        );
+    }
+
+    function register(): void {
+        if (validateData())
+            registerUser(
+                state.email,
+                state.password,
+                state.name,
+                state.familyName,
+                state.gender!
+            );
+    }
 
     return (
         <div className="container">
@@ -108,6 +138,7 @@ const Registration: FC = () => {
                     />
                 )}
             </>
+            {authState && <Navigate to="/profile" />}
         </div>
     );
 };
@@ -125,9 +156,6 @@ const FirstStep: FC<{
         PasswordError.NONE
     );
     const [formTouched, setFormTouched] = useState<boolean>(false);
-    const emailValidator = new RegExp(
-        "^[a-zA-Z0-9._:$!%-]+@[a-zA-Z0-9.-]+.[a-zA-Z]$"
-    );
 
     function next(e: FormEvent<HTMLFormElement>): void {
         e.preventDefault();
@@ -156,11 +184,14 @@ const FirstStep: FC<{
         validateForm();
     });
 
-    function isEmailTaken(): boolean {
-        return email === "asd@gmail.com";
+    async function isEmailTaken(): Promise<boolean> {
+        const response = await axios.get<{ exists: boolean }>(
+            `/user/exists/${email}/`
+        );
+        return response.data.exists;
     }
 
-    function validateEmail(): void {
+    async function validateEmail(): Promise<void> {
         if (email.length === 0) {
             setEmailError(EmailError.EMPTY);
             return;
@@ -169,7 +200,7 @@ const FirstStep: FC<{
             setEmailError(EmailError.INCORRECT);
             return;
         }
-        if (isEmailTaken()) {
+        if (await isEmailTaken()) {
             setEmailError(EmailError.TAKEN);
             return;
         }
@@ -319,12 +350,6 @@ const FirstStep: FC<{
     );
 };
 
-const options = [
-    { value: 1, label: "Мужской" },
-    { value: 2, label: "Женский" },
-    { value: 3, label: "Другое" },
-];
-
 const SecondStep: FC<{
     gender: IOption | undefined;
     name: string;
@@ -336,6 +361,30 @@ const SecondStep: FC<{
     const [familyNameError, setFamilyNameError] = useState<boolean>(false);
     const [genderError, setGenderError] = useState<boolean>(false);
     const [formError, setFormError] = useState<boolean>(true);
+    const [genderOptions, setGenderOptions] = useState<IOption[]>([]);
+
+    async function getGenderOptions(): Promise<IOption[]> {
+        const response = await axios.get<{ name: string; id: number }[]>(
+            "/sex/"
+        );
+        const options = response.data;
+        let repackedOptions: IOption[] = [];
+        options.forEach((option: { name: string; id: number }) => {
+            repackedOptions.push({
+                value: option.id.toString(),
+                label: option.name,
+            });
+        });
+        return repackedOptions;
+    }
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const options = await getGenderOptions();
+            setGenderOptions(options);
+        };
+        fetchData();
+    }, []);
 
     function setGender(gender: IOption): void {
         dispatch({ type: Action.GENDER, value: gender });
@@ -410,7 +459,7 @@ const SecondStep: FC<{
                     id="gender"
                     className="select"
                     option={gender}
-                    options={options}
+                    options={genderOptions}
                     placeholder="Выберите пол"
                     onChange={(e) => {
                         setGender(e);
