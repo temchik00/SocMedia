@@ -118,7 +118,7 @@ const Registration: FC = () => {
     }
 
     return (
-        <div className="container">
+        <div className="registration-container">
             <Stepper step={state.step} />
             <>
                 {state.step === Step.FIRST ? (
@@ -138,7 +138,7 @@ const Registration: FC = () => {
                     />
                 )}
             </>
-            {authState && <Navigate to="/profile" />}
+            {authState && <Navigate to="/profile" replace={true} />}
         </div>
     );
 };

@@ -35,14 +35,16 @@ export const AuthContext = React.createContext<{
     authState: boolean | undefined;
     userId: number | undefined;
     registerUser: Register;
+    logIn: LogIn;
 }>({
     authState: undefined,
     userId: undefined,
     registerUser: async () => false,
+    logIn: async () => false,
 });
 
 export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
-    const [authState, setAuthState] = useState<boolean | undefined>(undefined);
+    const [authState, setAuthState] = useState<boolean | undefined>(false);
     const [accessToken, setAccessToken] = useState<string>("");
     const [userId, setUserId] = useState<number | undefined>(undefined);
 
@@ -132,6 +134,7 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
                 authState: authState,
                 userId: userId,
                 registerUser: register,
+                logIn: logIn,
             }}
         >
             {children}

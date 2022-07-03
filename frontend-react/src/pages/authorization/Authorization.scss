@@ -1,11 +1,11 @@
-.registration-container {
+.auth-container {
     display: flex;
     align-items: center;
     justify-content: center;
     min-width: 100%;
     min-height: 100%;
     flex-direction: column;
-    .Registration {
+    .Authorization {
         padding: 33px 16px;
         width: 630px;
     }
@@ -23,14 +23,8 @@
         margin-bottom: 49px;
     }
 
-    .apply-button {
+    .button-wrapper {
         margin-bottom: 16px;
-        gap: 7px;
-    }
-
-    .arrow {
-        height: 20px;
-        margin-top: 1px;
     }
 
     .link-container {
@@ -45,33 +39,5 @@
         line-height: 16px;
         text-decoration-line: underline;
         color: #ededed;
-    }
-
-    .Stepper {
-        display: flex;
-        margin-bottom: 18px;
-        gap: 100px;
-    }
-
-    .step-circle {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-
-        font-weight: 400;
-        font-size: 30px;
-        color: #ededed;
-    }
-
-    .step-circle.active {
-        background: #3663be;
-        cursor: default;
-    }
-
-    .step-circle.inactive {
-        background: #383a40;
     }
 }
