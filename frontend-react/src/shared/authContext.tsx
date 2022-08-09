@@ -1,22 +1,12 @@
 import axios from "../api/axios";
 import React, { FC, ReactNode, useEffect, useState } from "react";
 import { IOption } from "../interfaces/option";
+import { AxiosResponse } from "axios";
+import { IUserResponse } from "../interfaces/userInfo";
 
 interface ITokenData {
     access_token: string;
     token_type: string;
-}
-
-interface IUserInfo {
-    email: string;
-    first_name: string;
-    last_name: string;
-    id: number;
-    sex: number;
-    city: number;
-    birth_date: string;
-    phone: string;
-    avatar: string;
 }
 
 type LogIn = (email: string, password: string) => Promise<boolean>;
@@ -34,13 +24,17 @@ type Register = (
 export const AuthContext = React.createContext<{
     authState: boolean | undefined;
     userId: number | undefined;
+    accessToken: string;
     registerUser: Register;
     logIn: LogIn;
+    logOut: LogOut;
 }>({
     authState: undefined,
     userId: undefined,
+    accessToken: "",
     registerUser: async () => false,
     logIn: async () => false,
+    logOut: () => {},
 });
 
 export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
@@ -67,8 +61,8 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
     };
 
     const logOut: LogOut = (callback?) => {
-        setAuthState(false);
         setAccessToken("");
+        setAuthState(false);
         if (callback) callback();
     };
 
@@ -109,8 +103,10 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
         }
     };
 
-    const getSelfInfo: () => Promise<IUserInfo> = () => {
-        return axios.get("/user/", {
+    const getSelfInfo: () => Promise<
+        AxiosResponse<IUserResponse, any>
+    > = () => {
+        return axios.get<IUserResponse>("/user/", {
             headers: {
                 Authorization: "Bearer " + accessToken,
             },
@@ -119,7 +115,7 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
     const getSelfId: () => Promise<void> = async () => {
         const userInfoResponse = await getSelfInfo();
-        setUserId(userInfoResponse.id);
+        setUserId(userInfoResponse.data.id);
     };
 
     useEffect(() => {
@@ -133,8 +129,10 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
             value={{
                 authState: authState,
                 userId: userId,
+                accessToken: accessToken,
                 registerUser: register,
                 logIn: logIn,
+                logOut: logOut,
             }}
         >
             {children}

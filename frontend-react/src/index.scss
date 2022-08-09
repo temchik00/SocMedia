@@ -1,8 +1,12 @@
 body {
     margin: 0;
     background-color: #292b2f;
-    min-width: 100vw;
     min-height: 100vh;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+input,
+textarea {
     font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -60,36 +64,42 @@ label {
     box-sizing: border-box;
 }
 
-.apply-button {
+.base-button {
     cursor: pointer;
     border: none;
     outline: none;
     cursor: pointer;
-    background: #3663be;
-    border-radius: 11px;
-    padding: 14px 30px;
     display: flex;
     align-items: center;
     justify-content: center;
     width: 100%;
+}
 
+.base-button:hover:not(:disabled) {
+    opacity: 0.95;
+}
+
+.base-button:active:not(:disabled) {
+    opacity: 0.8;
+}
+
+.base-button:disabled {
+    cursor: not-allowed;
+}
+
+.apply-button {
+    @extend .base-button;
+    background: #3663be;
+    border-radius: 11px;
+    padding: 14px 30px;
     color: #ededed;
     font-weight: 600;
     font-size: 30px;
     line-height: 30px;
 }
 
-.apply-button:hover:not(:disabled) {
-    opacity: 0.95;
-}
-
-.apply-button:active:not(:disabled) {
-    opacity: 0.8;
-}
-
 .apply-button:disabled {
     background: #5f646d;
-    cursor: not-allowed;
 }
 
 .input-error {
